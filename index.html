@@ -270,10 +270,10 @@
                     this.cart.push(lesson); 
                     
                     if(lesson.numberOfSpaces > 0){
-                        lesson.numberOfSpaces -= 1; /*question: within this fxn, we're accessing the version of lesson passed into the for (a)
-                                                     that lesson is from the sortedLessons array, which is from the original. When we alter no
-                                                     of spaces on this lesson(a) it doesn't affect the other versions above it in the hierachy?
-                        */
+                        lesson.numberOfSpaces -= 1; //question: within this fxn, we're accessing the version of lesson passed into the for (a)
+                                                    //that lesson is from the sortedLessons array, which is from the original. When we alter no
+                    //fetch here, $inc neg                                //of spaces on this lesson(a) it doesn't affect the other versions above it in the hierachy?
+                                                    
                     }
                 },
 
