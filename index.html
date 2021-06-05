@@ -1,0 +1,447 @@
+<html>
+    <head>
+        <title>After School Club</title>  
+    
+        <script src="https://unpkg.com/vue"></script>
+
+        <script src="lesson.js"></script>
+
+        <link rel = "stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <link rel = "stylesheet" href="style.css">
+    </head>
+      
+    <!--HTML BODY-->
+    <body>
+        <!-- The element where Vue will mount our application -->
+        <div id="app">
+            <header>
+                <h1 v-text="sitename"></h1>           
+            </header>
+
+            <main>
+
+                <div class="Page" v-if='toShop'> <!-- if showLesson is on, dont show cart, show lesson.-->
+
+                    <button v-on:click='showCart' v-if="cartItemCount"><!--cartItemCount should return 0 or positive, 0 should be falsy, serving same purpose-->
+                        {{ cartItemCount }}
+                        <span class="fas fa-cart-plus"></span>cart
+                    </button>
+    
+                    <div class="sort">
+
+                    <div id="sortBy">
+
+                        <p>sort by</p> <!--finish this -->
+                        
+                        <p>
+                        <input type="radio" id="subject" value="subject" v-model="sortBy">
+                        <label for="subject">Subject</label>
+                        </p>
+                        
+                        <p>
+                        <input type="radio" id="location" value="location" v-model="sortBy">
+                        <label for="location">Location</label>
+                        </p>
+                    
+                        <p>
+                        <input type="radio" id="price" value="price" v-model="sortBy">
+                        <label for="price">Price</label>
+                        </p>
+                        
+                        
+                        <p>
+                        <input type="radio" id="availability" value="numberOfSpaces" v-model="sortBy">
+                        <label for="availability">Availability</label>
+                        </p>
+
+                        
+                        
+                    </div>
+
+                    <div id="sortOrder">
+
+                        <p>sort order</p> 
+                        
+                        <p>
+                        <input type="radio" id="ascending" value="ascending" v-model="sortOrder">
+                        <label for="ascending">Ascending</label>
+                        </p>
+
+                        <p>
+                        <input type="radio" id="descending" value="descending" v-model="sortOrder">
+                        <label for="descending">Descending</label>
+                        </p>
+
+                        
+                        
+                    </div>
+
+                    </div>
+
+                    <div class="lesson" v-for="lesson in sortedLessons">
+
+                    <figure>
+                        <img width="250px" height="250px" v-bind:src="lesson.image">
+                    </figure>
+                    <h2>{{lesson.subject}}</h2>
+                    <p>location: {{lesson.location}}</p>
+                    <p>price: {{lesson.price}}</p>
+                    <p>number of spaces: {{lesson.numberOfSpaces}}</p>
+                    <!--<button v-on:click="addToCart" v-show="canAddToCart">
+                        add to cart
+                    </button>-->
+
+                    <button v-on:click='addToCart(lesson)' v-if='canAddToCart(lesson)'>Add To Cart</button>
+                    <button disabled= "disabled" v-else>Add to Cart</button>
+
+                   <!-- <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
+                    <span v-else-if="product.availableInventory - cartCount(product.id) < 5">Only {{product.availableInventory - cartCount(product.id)}} left!</span>
+                    <span v-else>Buy now!</span>
+
+
+                    <div>
+                        <span v-for="n in product.rating">★</span><span v-for="n in 5-product.rating">☆</span>
+                    </div>
+                    -->
+
+                    </div>
+                </div>
+
+                <div class="page" v-else-if="toCart">  <!-- if showLesson is off, dont show lesson, if checkout is off, show cart.-->
+                    
+                    <h2>Shopping Cart</h2>
+
+                    <div>
+                        <p v-if="!cartItemCount">Cart is empty</p>
+
+                        <button v-on:click='showShop'><!--if clicked change showlesson to true, therefore show lesson.-->
+
+                            <span class=" "></span>Back to shop 
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="lesson" v-for="lesson in cart">
+
+                        <figure>
+                            <img  width="250px" height="250px"  v-bind:src="lesson.image">
+                        </figure>
+                        <h2>{{lesson.subject}}</h2>
+                        <p>location: {{lesson.location}}</p>
+                        <p>price: {{lesson.price}}</p>
+                        <p>number of spaces: {{lesson.numberOfSpaces}}</p>
+                        <!--<button v-on:click="addToCart" v-show="canAddToCart">
+                            add to cart
+                        </button>-->
+    
+                        <button v-on:click='removeFromCart(lesson)'>remove</button>
+                        
+    
+                       <!-- <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
+                        <span v-else-if="product.availableInventory - cartCount(product.id) < 5">Only {{product.availableInventory - cartCount(product.id)}} left!</span>
+                        <span v-else>Buy now!</span>
+    
+    
+                        <div>
+                            <span v-for="n in product.rating">★</span><span v-for="n in 5-product.rating">☆</span>
+                        </div>
+                    -->
+    
+                    </div>
+
+                    <button v-on:click='showCheckout' v-if="cartItemCount"><!--cartItemCount should return 0 or positive, 0 should be falsy, serving same purpose-->
+                        
+                        <span class=" "></span>To checkout
+                    
+                    </button>
+
+                </div>
+
+                <div class="page" v-else-if ="toCheckout">
+
+                    <h2>Checkout Page</h2>
+
+                    <button v-on:click='showShop'><!--cartItemCount should return 0 or positive, 0 should be falsy, serving same purpose-->
+                        
+                        <span class=" "></span>back to shop
+                    </button>
+
+                    
+                    <button v-on:click='showCart' v-if="cartItemCount"><!--cartItemCount should return 0 or positive, 0 should be falsy, serving same purpose-->
+                        {{ cartItemCount }}
+                        <span class="fas fa-cart-plus"></span>cart
+                    </button>
+
+                    
+    
+
+                    <p>
+                        <strong>Name:</strong>
+
+                        <input required v-model.trim="order.name"/>
+                    </p>
+
+                    <p>
+                        <strong>Phone number:</strong>
+
+                        <input v-model="order.phone" type="tel" required/>
+                    </p>
+                
+                    <p>
+                        <strong>Address:</strong>
+
+                        <input v-model="order.address"/>
+                    </p>
+
+                    <p>
+                        <strong>City:</strong>
+
+                        <input v-model="order.city"/>
+                    </p>
+
+                  
+
+
+                    <strong>Order Information</strong>
+                    <p>Name: {{order.name}}</p>
+                   
+                    <p>Phone: {{order.phone}}</p>
+                   
+                    <button v-on:click='submitForm' v-if="validate"><!--cartItemCount should return 0 or positive, 0 should be falsy, serving same purpose-->
+                        <span class=" "></span>Place order
+                    </button>
+
+                    <div v-if="errors.length">
+                        <p>please fix the following errors:</p>
+                        <p v-for="error in errors">{{error}}</p>
+                    </div>
+                   
+                    
+                  
+                </div>
+               
+            </main>
+        </div>
+
+        <!-- VUE SECTION -->
+        
+        <script type="text/javascript">
+        
+            // The Vue constructor
+            var webstore = new Vue({
+            // The 'option object': DOM mounting point
+            el: '#app',
+            data: {
+                sitename: 'After School Club',
+                lessons: lessons,
+                cart: [],
+                toShop: true,
+                toCart: false,
+                toCheckout: false,
+                sortBy: 'price',
+                sortOrder: 'ascending',
+                order:{
+                    name: '',
+                    address: '',
+                    city: '',
+                    phone: '',
+                },
+                errors: [],
+            },
+            methods: {
+                addToCart(lesson) {
+                    this.cart.push(lesson); 
+                    
+                    if(lesson.numberOfSpaces > 0){
+                        lesson.numberOfSpaces -= 1; /*question: within this fxn, we're accessing the version of lesson passed into the for (a)
+                                                     that lesson is from the sortedLessons array, which is from the original. When we alter no
+                                                     of spaces on this lesson(a) it doesn't affect the other versions above it in the hierachy?
+                        */
+                    }
+                },
+
+                removeFromCart(lesson){
+
+                    let index = this.cart.indexOf(lesson);
+                    console.log(index);
+                    if(index > -1){
+                        this.cart.splice(index, 1);
+                    }
+                    lesson.numberOfSpaces+= 1;
+                    console.log(this.cart);
+                },
+
+                showShop(){
+                    this.toShop = true;
+                    this.toCart = false;
+                    this.toCheckout = false;
+                },
+
+                showCart(){
+                    
+
+                    this.toShop = false;
+                    this.toCart = true;
+                    this.toCheckout = false;
+
+
+                },
+                showCheckout() {
+                    
+                    this.toShop = false;
+                    this.toCart = false;
+                    this.toCheckout = true;
+                },
+
+                canAddToCart(lesson){
+                    return lesson.numberOfSpaces > 0; //products doesn't have an available inventory. it has an object which must be accessed. its the object that has the id.
+                },
+
+                cartCount(id){
+                    let count = 0;
+                    for(let i = 0; i < this.cart.length; i++){
+                        if(this.cart[i] === id) {  //what does this.cart[i] return? expecting object.
+                            count++
+                        }
+                    }
+                    return count;
+                },
+
+                submitForm(){
+                  alert("order submitted");
+                  this.order.name = null;
+                  this.order.phone = null;
+                  this.cart = [];
+                }
+            },
+
+
+            computed: {
+
+                cartItemCount(){
+                    return this.cart.length;
+                },
+               /* canAddToCart: function(){
+                    return this.products.availableInventory > this.cartItemCount; //products doesn't have an available inventory. it has an object which must be accessed. its the object that has the id.
+                }*/
+                sortedLessons(){ // implement sort in ascending or descending order. if a > b ret -1 instead and vice versa.
+                    let lessonArray = this.lessons.slice(0);
+                    let sortBy = this.sortBy;
+                    function compareAscending(a, b) {
+
+                      if(sortBy === "price"){ 
+                          
+                        
+                        if (a.price > b.price)
+                            return 1;
+                        if (a.price < b.price)
+                            return -1;
+                        return 0;
+                      }
+
+                      else if(sortBy === "subject"){
+                          
+                        if (a.subject.toUpperCase() > b.subject.toUpperCase())
+                            return 1;
+                        if (a.subject.toUpperCase() < b.subject.toUpperCase())
+                            return -1;
+                        return 0;
+                      }
+
+                      else if(sortBy === "location"){
+
+                        if (a.location.toUpperCase() > b.location.toUpperCase())
+                            return 1;
+                        if (a.location.toUpperCase() < b.location.toUpperCase())
+                            return -1;
+                        return 0;
+
+                      }
+
+                      else{
+
+                        if (a.numberOfSpaces > b.numberOfSpaces)
+                            return 1;
+                        if (a.numberOfSpaces < b.numberOfSpaces)
+                            return -1;
+                        return 0;
+                      }
+                    }
+
+                    function compareDescending(a, b) {
+
+                        
+                      if(sortBy === "price"){ 
+                          
+                         
+                        if (a.price > b.price)
+                            return -1;
+                        if (a.price < b.price)
+                            return 1;
+                        return 0;
+                        }
+  
+                        else if(sortBy === "subject"){
+                            
+                          if (a.subject.toUpperCase() > b.subject.toUpperCase())
+                              return -1;
+                          if (a.subject.toUpperCase() < b.subject.toUpperCase())
+                              return 1;
+                          return 0;
+                        }
+  
+                        else if(sortBy === "location"){
+  
+                          if (a.location.toUpperCase() > b.location.toUpperCase())
+                              return -1;
+                          if (a.location.toUpperCase() < b.location.toUpperCase())
+                              return 1;
+                          return 0;
+  
+                        }
+  
+                        else{
+  
+                          if (a.numberOfSpaces > b.numberOfSpaces)
+                              return -1;
+                          if (a.numberOfSpaces < b.numberOfSpaces)
+                              return 1;
+                          return 0;
+                        }
+                       
+                    }
+                    return this.sortOrder === "ascending" ? lessonArray.sort(compareAscending) : lessonArray.sort(compareDescending);
+                },
+
+                validate(){
+
+                    /*create two regular expressions to check the correct pattern is being entered for name and phone number*/
+                    let phoneRegex =  /^[0-9]{9,11}$/g;
+                    let nameRegex = /^[A-Za-z]+$/ig;
+
+                    /*create a boolean test to see if phone number and name have been entered and are valid*/
+                    let val = phoneRegex.test(this.order.phone) && nameRegex.test(this.order.name);
+
+                    console.log(val);
+
+                    /*test validity. and return true if valid*/
+                    if (val){
+                        return 1;    //not entering. why? because of order of eval. stored in a variable and it worked.
+                    }
+
+                        
+                    return 0;
+
+                        
+                },
+
+            }
+
+    
+            });
+
+        </script>
+    </body>
+</html>
