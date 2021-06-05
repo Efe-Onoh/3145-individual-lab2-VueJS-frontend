@@ -1,0 +1,71 @@
+
+main{
+    font-family:sans-serif;
+    font-size: 20px;
+    margin-top: 120px;
+    color: rgb(48, 48, 48);
+}
+header{
+    height: 100px;
+    width: 100%;
+    background-color: white;
+    color: rgb(59, 59, 59);
+    display: flex;
+    position: fixed;
+    top: 0;
+    justify-content: center;
+   
+   
+    
+}
+
+.page{
+    text-align:center;
+}
+
+.sort{
+   
+    display: flex;
+    justify-content: space-between;
+    padding: 0 150px;
+    
+    font-size: 16px;
+}
+
+#sortBy,#sortOrder{
+    text-align: justify;
+    margin: 0;
+}
+.lesson{
+    display: inline-block ;
+ 
+    width: 300px;
+    
+    margin: 10px;
+}
+
+/*figure{
+  
+}
+
+img{
+  
+    
+}
+*/
+button{
+    background-color: #f0e2e2; /* Green */
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+
+}
+
+button:hover{
+    background-color:rgb(0, 105, 175);
+    color: white;
+}
